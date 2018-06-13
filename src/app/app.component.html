@@ -1,20 +1,159 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<header>
+  <div class="container mb-5 p-md-0">
+    <div class="row">
+      <div class="col col-md-5 col-lg-4">
+      <a href="/">
+        <div class="logo"> HaveFun</div>
+      </a></div>
+      <div class="col col-md-5 col-xs-12 col-lg-8 search d-md-flex align-items-center ">
+        <div class="search-group">
+          <i class="fas fa-search"></i>
+          <input type="search" placeholder="Explore your own activities" #search (keyup.enter)="onSearchEnter(search.value);search.value = ''">
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="container mb-5 p-md-0">
+  <div class="row d-flex flex-column flex-md-row">
+    <section class="mr-md-3 mr-lg-5">
+      <div class="filter-content">
+        <div class="filter-box py-4 px-4">
+          <div class="filter-box-title mb-3">Location</div>
+          <select class="custom-select" #selectZone>
+            <option value="" selected>select menu</option>
+            <option value="Koahsiung">Koahsiung</option>
+            <option value="Taipei">Taipei</option>
+            <option value="Tainan">Tainan</option>
+          </select>
+        </div>
+        <div class="filter-box py-4 px-4">
+          <div class="filter-box-title mb-3">Date</div>
+          <div class="form-group row text-right">
+            <label for="datestart" class="col-3 col-form-label filter-date">from</label>
+            <div class="col-9">
+              <input type="date" class="form-control" id="datestart">
+            </div>
+          </div>
+          <div class="form-group row text-right">
+            <label for="dateend" class="col-3 col-form-label filter-date">to</label>
+            <div class="col-9">
+              <input type="date" class="form-control" id="dateend">
+            </div>
+          </div>
+        </div>
+        <div class="filter-box py-4 px-4">
+          <div class="filter-box-title mb-3">Categories</div>
+          <label class="container" *ngFor="let item of categoriesTag; let i = index;">{{item.name}}
+            <input type="checkbox" (change)="toggleEditable(i)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
 
+    </section>
+    <section class="col p-0" *ngIf="showAll">
+      <div class="filter-info mx-3 mx-md-0">
+        <h3 class="mt-4">Showing
+          <span class="text-primary">15</span> results by…</h3>
+        <span class="filter-tag mr-2" *ngFor="let item of searchTag; let i = index;">{{item}}
+          <i class="far fa-times-circle ml-2" (click)="deleteSearchTag(i)"></i>
+        </span>
+      </div>
+      <div class="view-list mx-3 mt-4 mx-md-0 mr-md-3 d-flex flex-column flex-lg-row" *ngFor="let item of data" (click)="showDetail()">
+        <div class="view-img" style="background: url(https://picsum.photos/644/352/?random)"></div>
+        <div class="view-info px-3 py-3 d-flex flex-column">
+          <h4 class="text-primary font-weight-bold my-2">Kogi Cosby sweater ethical.</h4>
+          <p class="info-content">Donec euismod scelerisque ligula. Maecenas eu varius risus, eu aliquet arcu. Curabitur fermentum suscipit est,</p>
+          <div class="info-main">
+            <span class="font-weight-bold mr-3">Ethan Foster</span>
+            <span class="info-tag">Entertainment</span>
+          </div>
+          <div class="info-date mt-auto">
+            <i class="fas fa-map-marker-alt mr-2"></i>
+            <span class="mr-3">Kaohsiung City</span>
+            <i class="far fa-calendar-alt mr-2"></i>
+            <span class="mr-3">2018/5/24 - 2018/5/31</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 mx-3 float-right">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">3</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+    <section class="col p-0" *ngIf="!showAll">
+      <nav class=" mx-3 mx-md-0">
+        <ol class="breadcrumb mt-3">
+          <li class="breadcrumb-item">
+            <a href="#" (click)="showDetail()">Explore</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Kogi Cosby sweater ethical</li>
+        </ol>
+      </nav>
+      <div class="view-deatil">
+        <div class="embed-responsive embed-responsive-16by9" style="background: url(https://picsum.photos/880/495/?random)"></div>
+        <div class="view-article px-5 py-4">
+          <h2 class="text-primary font-weight-bold mb-4">Kogi Cosby sweater ethical.</h2>
+          <div class="info-main">
+            <span class="font-weight-bold mr-3">Ethan Foster</span>
+            <span class="info-tag">Entertainment</span>
+          </div>
+          <div class="info-date mt-3">
+            <i class="fas fa-map-marker-alt mr-2"></i>
+            <span class="mr-3">Kaohsiung City</span>
+            <i class="far fa-calendar-alt mr-2"></i>
+            <span class="mr-3">2018/5/24 - 2018/5/31</span>
+          </div>
+          <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, veritatis autem nulla amet neque illo debitis
+            fugit itaque ex quasi pariatur corrupti veniam cupiditate ipsa, quo quas suscipit quos dolorem. Et ex, obcaecati
+            ipsa molestias facere aliquid nihil voluptate ad, maxime cum iure laudantium modi fugit rerum tempore illum quis
+            mollitia optio aliquam ipsam sequi commodi? Illo doloribus rerum recusandae. Temporibus veniam explicabo ducimus
+            deleniti mollitia nihil eligendi quisquam, tempore impedit? Doloribus saepe, ipsam expedita rem officiis illo
+            alias aperiam aliquid earum enim laboriosam eveniet amet eaque, excepturi hic dolore. Corrupti cum, beatae libero
+            ex itaque doloribus autem deserunt minus commodi. Atque delectus commodi molestias quidem. Voluptate ea libero
+            dolore deleniti? Repellendus, tenetur perferendis quae debitis ad ipsum id laudantium. Asperiores a hic ad voluptates
+            eaque officiis quam excepturi amet, sequi voluptatibus sed earum repellat nesciunt ipsa magnam quo eum iure consequatur
+            quibusdam eveniet reiciendis sapiente tempore ut. Porro, dolorem. Saepe sed voluptatibus consectetur, ipsum totam
+            at ex quasi enim animi magni eius voluptates, earum a nostrum fugiat nesciunt sapiente! Fuga tempore voluptatum
+            libero commodi necessitatibus assumenda molestiae blanditiis vitae! Rerum voluptatibus delectus nesciunt beatae
+            temporibus minus sequi fugit rem aspernatur, velit vel accusantium placeat ad porro, error aperiam molestiae.
+            Quaerat laborum ratione et doloribus labore dolorum distinctio iste nulla! Quibusdam corporis reiciendis rem!
+            In, veniam dolores voluptates voluptatibus perspiciatis incidunt iure, vel mollitia a debitis perferendis modi
+            totam dolorum eos earum nam dignissimos placeat, tempora beatae harum sit tenetur. Sunt saepe dignissimos voluptate
+            voluptatem officiis facilis aliquam nulla eius. Dolores suscipit voluptates maiores id animi. Ab, magnam hic!
+            Nostrum corporis perferendis, at eveniet voluptates deserunt nihil maiores magnam consequatur. Natus maxime rerum
+            repellat voluptate ab vel iure, cupiditate molestiae, suscipit excepturi eum nemo cum aliquid minus a doloribus
+            nam! Sint officiis rerum optio neque perferendis inventore rem itaque exercitationem.</p>
+          <div class="text-center">
+            <button class="btn btn-primary" (click)="showDetail()">Back</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
