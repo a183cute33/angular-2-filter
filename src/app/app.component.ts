@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from './service/app.service';
 import { App } from './model/app';
-import { Api } from './model/api';
 
 import { ajax } from 'rxjs/ajax';
 
@@ -32,7 +31,7 @@ export class AppComponent implements OnInit {
     const apiData = ajax('https://data.kcg.gov.tw/api/action/datastore_search?resource_id=92290ee5-6e61-456f-80c0-249eae2fcc97');
     apiData.subscribe(res => console.log(res.status, res.response));
     this.appService.getData()
-      .subscribe((res: Api) => {
+      .subscribe((res: any) => {
         const records = res.result.records;
         this.count = records.length;
         // this.pageCount = records.length / 10;
@@ -62,7 +61,6 @@ export class AppComponent implements OnInit {
     if (index > -1) {
       this.searchTag.splice(index, 1);
     }
-    console.log(this.searchTag);
   }
 
   addSearchTag(data) {
@@ -88,9 +86,17 @@ export class AppComponent implements OnInit {
     }
   }
 
-  toggleEditable(event: Event, str: string) {
-    alert(event.target.checked)
-    if (!event.target.checked) {
+  payToggle(event: Event, str: string) {
+    if (this.pay) {
+      this.deleteSearchFormIndexOf(str);
+    } else {
+      this.addSearchTag(str);
+    }
+    this.allTagFilter();
+  }
+
+  openToggle(event: Event, str: string) {
+    if (this.open) {
       this.deleteSearchFormIndexOf(str);
     } else {
       this.addSearchTag(str);

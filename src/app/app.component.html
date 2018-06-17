@@ -28,11 +28,11 @@
         <div class="filter-box py-4 px-4">
           <div class="filter-box-title mb-3">Categories</div>
           <label class="container">景點是否付費
-            <input type="checkbox" [(ngModel)]="pay" (change)="toggleEditable($event,'免費參觀')">
+            <input type="checkbox" [(ngModel)]="pay" (change)="payToggle($event,'免費參觀')">
             <span class="checkmark"></span>
           </label>
           <label class="container">是否全天候開放
-            <input type="checkbox" [(ngModel)]="open" (change)="toggleEditable($event,'是否全天候開放')">
+            <input type="checkbox" [(ngModel)]="open" (change)="openToggles($event,'是否全天候開放')">
             <span class="checkmark"></span>
           </label>
         </div>
