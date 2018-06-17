@@ -213,7 +213,14 @@ header {
   }
 }
 
-.info-content {}
+.text-overflow {
+  width: 100%;
+  .info-content {
+    // overflow: hidden;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
+  }
+}
 
 .info-tag {
   display: inline-block;

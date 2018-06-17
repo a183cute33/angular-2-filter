@@ -1,15 +1,15 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <header>
   <div class="container mb-5 p-md-0">
     <div class="row">
-      <div class="col col-md-5 col-lg-4">
-      <a href="/">
-        <div class="logo"> HaveFun</div>
-      </a></div>
+      <div class="col col-md-5 col-lg-4 col-xs-12">
+        <a href="/">
+          <div class="logo"> HaveFun</div>
+        </a>
+      </div>
       <div class="col col-md-5 col-xs-12 col-lg-8 search d-md-flex align-items-center ">
         <div class="search-group">
           <i class="fas fa-search"></i>
-          <input type="search" placeholder="Explore your own activities" #search (keyup.enter)="onSearchEnter(search.value);search.value = ''">
+          <input type="search" placeholder="Explore your own activities" #search (keyup)="onSpace(search.value)" (keyup.enter)="onSearchEnter(search.value);">
         </div>
       </div>
     </div>
@@ -21,60 +21,47 @@
       <div class="filter-content">
         <div class="filter-box py-4 px-4">
           <div class="filter-box-title mb-3">Location</div>
-          <select class="custom-select" #selectZone>
-            <option value="" selected>select menu</option>
-            <option value="Koahsiung">Koahsiung</option>
-            <option value="Taipei">Taipei</option>
-            <option value="Tainan">Tainan</option>
+          <select class="custom-select" [(ngModel)]="selectedLocation" (change)="changeSelect($event)">
+            <option *ngFor="let item of locationOption; let i = index;">{{item}}</option>
           </select>
         </div>
         <div class="filter-box py-4 px-4">
-          <div class="filter-box-title mb-3">Date</div>
-          <div class="form-group row text-right">
-            <label for="datestart" class="col-3 col-form-label filter-date">from</label>
-            <div class="col-9">
-              <input type="date" class="form-control" id="datestart">
-            </div>
-          </div>
-          <div class="form-group row text-right">
-            <label for="dateend" class="col-3 col-form-label filter-date">to</label>
-            <div class="col-9">
-              <input type="date" class="form-control" id="dateend">
-            </div>
-          </div>
-        </div>
-        <div class="filter-box py-4 px-4">
           <div class="filter-box-title mb-3">Categories</div>
-          <label class="container" *ngFor="let item of categoriesTag; let i = index;">{{item.name}}
-            <input type="checkbox" (change)="toggleEditable(i)">
+          <label class="container">景點是否付費
+            <input type="checkbox" [(ngModel)]="pay" (change)="toggleEditable($event,'免費參觀')">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">是否全天候開放
+            <input type="checkbox" [(ngModel)]="open" (change)="toggleEditable($event,'是否全天候開放')">
             <span class="checkmark"></span>
           </label>
         </div>
       </div>
-
     </section>
     <section class="col p-0" *ngIf="showAll">
       <div class="filter-info mx-3 mx-md-0">
         <h3 class="mt-4">Showing
-          <span class="text-primary">15</span> results by…</h3>
+          <span class="text-primary">{{count}}</span> results by…</h3>
         <span class="filter-tag mr-2" *ngFor="let item of searchTag; let i = index;">{{item}}
           <i class="far fa-times-circle ml-2" (click)="deleteSearchTag(i)"></i>
         </span>
       </div>
-      <div class="view-list mx-3 mt-4 mx-md-0 mr-md-3 d-flex flex-column flex-lg-row" *ngFor="let item of data" (click)="showDetail()">
-        <div class="view-img" style="background: url(https://picsum.photos/644/352/?random)"></div>
-        <div class="view-info px-3 py-3 d-flex flex-column">
-          <h4 class="text-primary font-weight-bold my-2">Kogi Cosby sweater ethical.</h4>
-          <p class="info-content">Donec euismod scelerisque ligula. Maecenas eu varius risus, eu aliquet arcu. Curabitur fermentum suscipit est,</p>
+      <div class="view-list mx-3 mt-4 mx-md-0 mr-md-3 d-flex flex-column flex-lg-row" *ngFor="let data of showDatas" (click)="showDetail()">
+        <div class="view-img" [style.backgroundImage]="'url('+ data.Picture1 +')'"></div>
+        <!-- <div class="view-img" style="background: url(https://picsum.photos/644/352/?random)"></div> -->
+        <div class="view-info px-3 py-3 d-flex flex-column text-overflow">
+          <h4 class="text-primary font-weight-bold my-2">{{data.Name}}</h4>
+          <p class="info-content">{{ (data.Description.length>60)? (data.Description | slice:0:60)+'..':(data.Description) }}</p>
           <div class="info-main">
-            <span class="font-weight-bold mr-3">Ethan Foster</span>
-            <span class="info-tag">Entertainment</span>
+            <i class="fas fa-phone-square mr-2"></i>
+            <span class="font-weight-bold mr-3">{{data.Tel}}</span>
+            <!-- <span class="info-tag">Entertainment</span> -->
           </div>
           <div class="info-date mt-auto">
             <i class="fas fa-map-marker-alt mr-2"></i>
-            <span class="mr-3">Kaohsiung City</span>
+            <span class="mr-3">{{data.Zone}}</span>
             <i class="far fa-calendar-alt mr-2"></i>
-            <span class="mr-3">2018/5/24 - 2018/5/31</span>
+            <span class="mr-3">{{data.Opentime}}</span>
           </div>
         </div>
       </div>
@@ -87,14 +74,8 @@
                 <span class="sr-only">Previous</span>
               </a>
             </li>
-            <li class="page-item">
-              <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">3</a>
+            <li class="page-item" *ngFor="let page of pageCount;let i = index;">
+              <a class="page-link" href="#">{{i}}</a>
             </li>
             <li class="page-item">
               <a class="page-link" href="#" aria-label="Next">
