@@ -9,7 +9,7 @@
       <div class="col col-md-5 col-xs-12 col-lg-8 search d-md-flex align-items-center ">
         <div class="search-group">
           <i class="fas fa-search"></i>
-          <input type="search" placeholder="Explore your own activities" #search (keyup)="onSpace(search.value)" (keyup.enter)="onSearchEnter(search.value);">
+          <input name="keyword" [(ngModel)]="keyword" #tKeyword="ngModel" type="search" placeholder="Explore your own activities">
         </div>
       </div>
     </div>
@@ -21,32 +21,35 @@
       <div class="filter-content">
         <div class="filter-box py-4 px-4">
           <div class="filter-box-title mb-3">Location</div>
-          <select class="custom-select" [(ngModel)]="selectedLocation" (change)="changeSelect($event)">
+          <select class="custom-select" name="zone" [(ngModel)]="zone" #tZone="ngModel">
+            <option value=''>請選擇</option>
             <option *ngFor="let item of locationOption; let i = index;">{{item}}</option>
           </select>
         </div>
         <div class="filter-box py-4 px-4">
-          <div class="filter-box-title mb-3">Categories</div>
-          <label class="container">景點是否付費
-            <input type="checkbox" [(ngModel)]="pay" (change)="payToggle($event,'免費參觀')">
-            <span class="checkmark"></span>
-          </label>
-          <label class="container">是否全天候開放
-            <input type="checkbox" [(ngModel)]="open" (change)="openToggles($event,'是否全天候開放')">
-            <span class="checkmark"></span>
-          </label>
+          <div class="filter-box-title mb-3">票價資訊</div>
+          <select class="custom-select" name="ticketInfo" [(ngModel)]="ticketInfo" #tTicketInfo="ngModel">
+            <option value=''>請選擇</option>
+            <option *ngFor="let item of ticketInfoOptions" [value]="item">{{item}}</option>
+          </select>
         </div>
       </div>
     </section>
     <section class="col p-0" *ngIf="showAll">
       <div class="filter-info mx-3 mx-md-0">
         <h3 class="mt-4">Showing
-          <span class="text-primary">{{count}}</span> results by…</h3>
-        <span class="filter-tag mr-2" *ngFor="let item of searchTag; let i = index;">{{item}}
-          <i class="far fa-times-circle ml-2" (click)="deleteSearchTag(i)"></i>
+          <span class="text-primary">{{showData.length}}</span> results by…</h3>
+        <span class="filter-tag mr-2" *ngIf="zone"> {{zone}}
+          <i class="far fa-times-circle ml-2" (click)="zone=''"></i>
+        </span>
+        <span class="filter-tag mr-2" *ngIf="ticketInfo"> {{ticketInfo}}
+          <i class="far fa-times-circle ml-2" (click)="ticketInfo=''"></i>
+        </span>
+        <span class="filter-tag mr-2" *ngIf="keyword"> {{keyword}}
+          <i class="far fa-times-circle ml-2" (click)="keyword=''"></i>
         </span>
       </div>
-      <div class="view-list mx-3 mt-4 mx-md-0 mr-md-3 d-flex flex-column flex-lg-row" *ngFor="let data of showDatas" (click)="showDetail()">
+      <div class="view-list mx-3 mt-4 mx-md-0 mr-md-3 d-flex flex-column flex-lg-row" *ngFor="let data of showData" (click)="showDetail(data)">
         <div class="view-img" [style.backgroundImage]="'url('+ data.Picture1 +')'"></div>
         <!-- <div class="view-img" style="background: url(https://picsum.photos/644/352/?random)"></div> -->
         <div class="view-info px-3 py-3 d-flex flex-column text-overflow">
@@ -93,45 +96,26 @@
           <li class="breadcrumb-item">
             <a href="#" (click)="showDetail()">Explore</a>
           </li>
-          <li class="breadcrumb-item active" aria-current="page">Kogi Cosby sweater ethical</li>
+          <li class="breadcrumb-item active" aria-current="page">{{singleData.Name}}</li>
         </ol>
       </nav>
       <div class="view-deatil">
-        <div class="embed-responsive embed-responsive-16by9" style="background: url(https://picsum.photos/880/495/?random)"></div>
+        <div class="embed-responsive embed-responsive-16by9" [style.backgroundImage]="'url('+ singleData.Picture1 +')'"></div>
         <div class="view-article px-5 py-4">
-          <h2 class="text-primary font-weight-bold mb-4">Kogi Cosby sweater ethical.</h2>
+          <h2 class="text-primary font-weight-bold mb-4">{{singleData.Name}}</h2>
           <div class="info-main">
-            <span class="font-weight-bold mr-3">Ethan Foster</span>
-            <span class="info-tag">Entertainment</span>
+              <i class="fas fa-phone-square mr-2"></i>
+            <span class="font-weight-bold mr-3">{{singleData.Tel}}</span>
           </div>
           <div class="info-date mt-3">
             <i class="fas fa-map-marker-alt mr-2"></i>
-            <span class="mr-3">Kaohsiung City</span>
+            <span class="mr-3">{{singleData.Zone}}</span>
             <i class="far fa-calendar-alt mr-2"></i>
-            <span class="mr-3">2018/5/24 - 2018/5/31</span>
+            <span class="mr-3">{{singleData.Opentime}}</span>
           </div>
-          <p class="mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, veritatis autem nulla amet neque illo debitis
-            fugit itaque ex quasi pariatur corrupti veniam cupiditate ipsa, quo quas suscipit quos dolorem. Et ex, obcaecati
-            ipsa molestias facere aliquid nihil voluptate ad, maxime cum iure laudantium modi fugit rerum tempore illum quis
-            mollitia optio aliquam ipsam sequi commodi? Illo doloribus rerum recusandae. Temporibus veniam explicabo ducimus
-            deleniti mollitia nihil eligendi quisquam, tempore impedit? Doloribus saepe, ipsam expedita rem officiis illo
-            alias aperiam aliquid earum enim laboriosam eveniet amet eaque, excepturi hic dolore. Corrupti cum, beatae libero
-            ex itaque doloribus autem deserunt minus commodi. Atque delectus commodi molestias quidem. Voluptate ea libero
-            dolore deleniti? Repellendus, tenetur perferendis quae debitis ad ipsum id laudantium. Asperiores a hic ad voluptates
-            eaque officiis quam excepturi amet, sequi voluptatibus sed earum repellat nesciunt ipsa magnam quo eum iure consequatur
-            quibusdam eveniet reiciendis sapiente tempore ut. Porro, dolorem. Saepe sed voluptatibus consectetur, ipsum totam
-            at ex quasi enim animi magni eius voluptates, earum a nostrum fugiat nesciunt sapiente! Fuga tempore voluptatum
-            libero commodi necessitatibus assumenda molestiae blanditiis vitae! Rerum voluptatibus delectus nesciunt beatae
-            temporibus minus sequi fugit rem aspernatur, velit vel accusantium placeat ad porro, error aperiam molestiae.
-            Quaerat laborum ratione et doloribus labore dolorum distinctio iste nulla! Quibusdam corporis reiciendis rem!
-            In, veniam dolores voluptates voluptatibus perspiciatis incidunt iure, vel mollitia a debitis perferendis modi
-            totam dolorum eos earum nam dignissimos placeat, tempora beatae harum sit tenetur. Sunt saepe dignissimos voluptate
-            voluptatem officiis facilis aliquam nulla eius. Dolores suscipit voluptates maiores id animi. Ab, magnam hic!
-            Nostrum corporis perferendis, at eveniet voluptates deserunt nihil maiores magnam consequatur. Natus maxime rerum
-            repellat voluptate ab vel iure, cupiditate molestiae, suscipit excepturi eum nemo cum aliquid minus a doloribus
-            nam! Sint officiis rerum optio neque perferendis inventore rem itaque exercitationem.</p>
-          <div class="text-center">
-            <button class="btn btn-primary" (click)="showDetail()">Back</button>
+          <p class="mt-3">{{singleData.Description}}</p>
+          <div class="text-right">
+            <button class="btn btn-primary" (click)="showDetail()">返回</button>
           </div>
         </div>
       </div>
